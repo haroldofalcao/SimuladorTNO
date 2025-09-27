@@ -4,12 +4,15 @@
  * Foco na jornada de aprendizado e explicações claras
  */
 
+import { firebaseAnalytics } from './firebase.js';
+import { logEvent } from 'firebase/analytics';
+
 class NutriPathDidatico {
     constructor() {
         // Estado atual da jornada
         this.currentSection = 1;
         this.totalSections = 6;
-        
+
         // Configurações selecionadas
         this.config = {
             hospitalType: 'privado',
@@ -109,14 +112,33 @@ class NutriPathDidatico {
     initializeEventListeners() {
         // Seletores de tipo
         this.initializeTypeSelectors();
-        
+
         // Sliders personalizáveis
         this.initializeCustomSliders();
-        
+
         // Botão de simulação
         const runBtn = document.getElementById('runSimulation');
         if (runBtn) {
-            runBtn.addEventListener('click', () => this.runSimulation());
+            runBtn.addEventListener('click', (ev) => {
+                // log an analytics event for button click (safe-guard if analytics not available)
+                try {
+                    if (firebaseAnalytics) {
+                        logEvent(firebaseAnalytics, 'run_simulation', {
+                            label: 'exec_run_simulation_btn',
+                            hospitalType: this.config.hospitalType,
+                            patientType: this.config.patientType,
+                            populacao: this.config.populacao
+                        });
+                        console.info('Analytics: run_simulation event queued');
+                    }
+                } catch (e) {
+                    // ignore analytics errors
+                    console.debug('Analytics log failed:', e && e.message);
+                }
+
+                // proceed with simulation
+                this.runSimulation();
+            });
         }
 
         // Navegação
@@ -173,7 +195,7 @@ class NutriPathDidatico {
         const updateSlider = () => {
             const min = parseInt(minInput.value) || 0;
             const max = parseInt(maxInput.value) || 100;
-            
+
             if (min >= max) {
                 maxInput.value = min + 1;
                 return;
@@ -181,7 +203,7 @@ class NutriPathDidatico {
 
             sliderElement.min = min;
             sliderElement.max = max;
-            
+
             // Ajustar valor atual se necessário
             let currentValue = parseInt(sliderElement.value);
             if (currentValue < min) currentValue = min;
@@ -286,7 +308,7 @@ class NutriPathDidatico {
     restartJourney() {
         // Reset para seção 1
         this.showSection(1);
-        
+
         // Reset indicadores de progresso
         for (let i = 1; i <= this.totalSections; i++) {
             const step = document.getElementById(`step${i}`);
@@ -294,7 +316,7 @@ class NutriPathDidatico {
                 step.classList.remove('active', 'completed');
             }
         }
-        
+
         const firstStep = document.getElementById('step1');
         if (firstStep) {
             firstStep.classList.add('active');
@@ -319,7 +341,7 @@ class NutriPathDidatico {
             runBtn.disabled = true;
             runBtn.textContent = '⏳ SIMULANDO...';
             progressContainer.style.display = 'block';
-            
+
             // Simular progresso
             const steps = [
                 { progress: 20, text: 'Configurando parâmetros do hospital...' },
@@ -362,20 +384,20 @@ class NutriPathDidatico {
         // Simular com base na configuração atual
         const hospitalConfig = this.hospitalData[this.config.hospitalType];
         const patientConfig = this.patientData[this.config.patientType];
-        
+
         const custoDiario = hospitalConfig.avgDaily;
         const eficaciaAjustada = (this.config.eficaciaTNO / 100) * (this.config.adesao / 100);
-        
+
         // Resultados simulados baseados na configuração
         const tempoComTNO = patientConfig.avgLOS * (1 - eficaciaAjustada * 0.3);
         const tempoSemTNO = patientConfig.avgLOS;
-        
+
         const custoComTNO = (tempoComTNO * custoDiario) + (tempoComTNO * this.config.custoTNODiario);
         const custoSemTNO = tempoSemTNO * custoDiario;
-        
+
         const complicacoesComTNO = 18 * (1 - eficaciaAjustada * 0.4);
         const complicacoesSemTNO = 28;
-        
+
         return {
             comTNO: {
                 tempoInternacao: tempoComTNO,
@@ -395,40 +417,40 @@ class NutriPathDidatico {
         if (!this.resultados) return;
 
         const { comTNO, semTNO } = this.resultados;
-        
+
         // Tempo de internação
         document.getElementById('tnoInternacao').textContent = comTNO.tempoInternacao.toFixed(1);
         document.getElementById('controlInternacao').textContent = semTNO.tempoInternacao.toFixed(1);
-        document.getElementById('internacaoEconomia').textContent = 
+        document.getElementById('internacaoEconomia').textContent =
             `ECONOMIA: ${(semTNO.tempoInternacao - comTNO.tempoInternacao).toFixed(1)} dias`;
 
         // Custos
-        document.getElementById('tnoCusto').textContent = 
-            `R$ ${(comTNO.custo/1000).toFixed(1)}k`;
-        document.getElementById('controlCusto').textContent = 
-            `R$ ${(semTNO.custo/1000).toFixed(1)}k`;
-        document.getElementById('custoEconomia').textContent = 
-            `ECONOMIA: R$ ${((semTNO.custo - comTNO.custo)/1000).toFixed(1)}k`;
+        document.getElementById('tnoCusto').textContent =
+            `R$ ${(comTNO.custo / 1000).toFixed(1)}k`;
+        document.getElementById('controlCusto').textContent =
+            `R$ ${(semTNO.custo / 1000).toFixed(1)}k`;
+        document.getElementById('custoEconomia').textContent =
+            `ECONOMIA: R$ ${((semTNO.custo - comTNO.custo) / 1000).toFixed(1)}k`;
 
         // ROI
         const investimento = comTNO.custoTNO;
         const economia = semTNO.custo - comTNO.custo;
         const roi = ((economia - investimento) / investimento * 100);
-        document.getElementById('roiExplanation').textContent = 
-            `Para cada R$ 1 investido em TNO, o hospital economiza R$ ${(economia/investimento).toFixed(1)}. ROI de ${roi.toFixed(0)}%!`;
+        document.getElementById('roiExplanation').textContent =
+            `Para cada R$ 1 investido em TNO, o hospital economiza R$ ${(economia / investimento).toFixed(1)}. ROI de ${roi.toFixed(0)}%!`;
 
         // Complicações
         document.getElementById('tnoComplicacoes').textContent = `${comTNO.complicacoes.toFixed(0)}%`;
         document.getElementById('controlComplicacoes').textContent = `${semTNO.complicacoes.toFixed(0)}%`;
-        document.getElementById('complicacoesReducao').textContent = 
+        document.getElementById('complicacoesReducao').textContent =
             `REDUÇÃO: ${(((semTNO.complicacoes - comTNO.complicacoes) / semTNO.complicacoes) * 100).toFixed(0)}%`;
 
         // Conclusão final
         const economiaTotal = semTNO.custo - comTNO.custo;
         const diasEconomia = semTNO.tempoInternacao - comTNO.tempoInternacao;
         const percentualComplicacoes = ((semTNO.complicacoes - comTNO.complicacoes) / semTNO.complicacoes) * 100;
-        
-        document.getElementById('finalConclusion').innerHTML = 
+
+        document.getElementById('finalConclusion').innerHTML =
             `Com base na simulação, implementar TNO no seu hospital resultaria em uma <strong>economia líquida de R$ ${Math.round(economiaTotal).toLocaleString('pt-BR')} por paciente</strong>, 
             redução de <strong>${diasEconomia.toFixed(1)} dias de internação</strong> e <strong>${percentualComplicacoes.toFixed(0)}% menos complicações</strong>. 
             O ROI de <strong>${roi.toFixed(0)}%</strong> indica que é um investimento altamente recomendado.`;
@@ -495,7 +517,7 @@ class NutriPathDidatico {
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
                             }
                         }
@@ -536,7 +558,7 @@ class NutriPathDidatico {
                 maintainAspectRatio: false,
                 scales: {
                     x: { stacked: true },
-                    y: { 
+                    y: {
                         stacked: true,
                         title: {
                             display: true,
@@ -563,4 +585,17 @@ class NutriPathDidatico {
 document.addEventListener('DOMContentLoaded', () => {
     window.nutriPathDidatico = new NutriPathDidatico();
     console.log('✅ NutriPath Didático inicializado com sucesso!');
+
+    // Log page view (visit) to analytics if available
+    try {
+        if (firebaseAnalytics) {
+            logEvent(firebaseAnalytics, 'page_view', {
+                page_path: window.location.pathname,
+                page_title: document.title
+            });
+            console.info('Analytics: page_view event queued');
+        }
+    } catch (e) {
+        console.debug('Analytics page_view failed:', e && e.message);
+    }
 });
