@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useSimulator } from '@/context/SimulatorContext';
-import { NavigationButtons } from '@/components/NavigationButtons';
-import { Bar } from 'react-chartjs-2';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
+} from "chart.js";
+import { useState } from "react";
+import { Bar } from "react-chartjs-2";
+import { NavigationButtons } from "@/components/NavigationButtons";
+import { useSimulator } from "@/context/SimulatorContext";
 
 ChartJS.register(
   CategoryScale,
@@ -20,45 +20,53 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export function Simulacao() {
-  const { setCurrentSection, config, hospitalData, patientData, resultados, setResultados } = useSimulator();
+  const {
+    setCurrentSection,
+    config,
+    hospitalData,
+    patientData,
+    resultados,
+    setResultados,
+  } = useSimulator();
   const [isSimulating, setIsSimulating] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [progressText, setProgressText] = useState('');
+  const [progressText, setProgressText] = useState("");
 
   const executeSimulation = async () => {
     setIsSimulating(true);
-    
+
     const steps = [
-      { progress: 20, text: 'Configurando parâmetros do hospital...' },
-      { progress: 40, text: 'Criando pacientes virtuais...' },
-      { progress: 60, text: 'Simulando cenário COM TNO...' },
-      { progress: 80, text: 'Simulando cenário SEM TNO...' },
-      { progress: 100, text: 'Calculando resultados...' }
+      { progress: 20, text: "Configurando parâmetros do hospital..." },
+      { progress: 40, text: "Criando pacientes virtuais..." },
+      { progress: 60, text: "Simulando cenário COM TNO..." },
+      { progress: 80, text: "Simulando cenário SEM TNO..." },
+      { progress: 100, text: "Calculando resultados..." },
     ];
 
     for (const step of steps) {
       setProgress(step.progress);
       setProgressText(step.text);
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 800));
     }
 
     // Executar simulação
     const hospitalConfig = hospitalData[config.hospitalType];
     const patientConfig = patientData[config.patientType];
-    
+
     const custoDiario = hospitalConfig.avgDaily;
     const eficaciaAjustada = (config.eficaciaTNO / 100) * (config.adesao / 100);
-    
+
     const tempoComTNO = patientConfig.avgLOS * (1 - eficaciaAjustada * 0.3);
     const tempoSemTNO = patientConfig.avgLOS;
-    
-    const custoComTNO = (tempoComTNO * custoDiario) + (tempoComTNO * config.custoTNODiario);
+
+    const custoComTNO =
+      tempoComTNO * custoDiario + tempoComTNO * config.custoTNODiario;
     const custoSemTNO = tempoSemTNO * custoDiario;
-    
+
     const complicacoesComTNO = 18 * (1 - eficaciaAjustada * 0.4);
     const complicacoesSemTNO = 28;
 
@@ -67,62 +75,82 @@ export function Simulacao() {
         tempoInternacao: tempoComTNO,
         custo: custoComTNO,
         custoTNO: tempoComTNO * config.custoTNODiario,
-        complicacoes: complicacoesComTNO
+        complicacoes: complicacoesComTNO,
       },
       semTNO: {
         tempoInternacao: tempoSemTNO,
         custo: custoSemTNO,
-        complicacoes: complicacoesSemTNO
-      }
+        complicacoes: complicacoesSemTNO,
+      },
     });
 
     setIsSimulating(false);
     setProgress(0);
   };
 
-  const roi = resultados 
-    ? ((resultados.semTNO.custo - resultados.comTNO.custo - resultados.comTNO.custoTNO) / resultados.comTNO.custoTNO * 100)
+  const roi = resultados
+    ? ((resultados.semTNO.custo -
+        resultados.comTNO.custo -
+        resultados.comTNO.custoTNO) /
+        resultados.comTNO.custoTNO) *
+      100
     : 0;
 
-  const comparisonChartData = resultados ? {
-    labels: ['Alta Segura', 'Complicações'],
-    datasets: [
-      {
-        label: 'COM TNO',
-        data: [100 - resultados.comTNO.complicacoes, resultados.comTNO.complicacoes],
-        backgroundColor: ['rgba(22, 163, 74, 0.8)', 'rgba(220, 38, 38, 0.8)'],
-        borderColor: ['#16a34a', '#dc2626'],
-        borderWidth: 2
-      },
-      {
-        label: 'SEM TNO',
-        data: [100 - resultados.semTNO.complicacoes, resultados.semTNO.complicacoes],
-        backgroundColor: ['rgba(22, 163, 74, 0.4)', 'rgba(220, 38, 38, 0.4)'],
-        borderColor: ['#16a34a', '#dc2626'],
-        borderWidth: 2,
-        borderDash: [5, 5]
-      }
-    ]
-  } : null;
-
-  const costChartData = resultados ? {
-    labels: ['COM TNO', 'SEM TNO'],
-    datasets: [
-      {
-        label: 'Custo Hospitalar',
-        data: [
-          resultados.comTNO.custo - resultados.comTNO.custoTNO,
-          resultados.semTNO.custo
+  const comparisonChartData = resultados
+    ? {
+        labels: ["Alta Segura", "Complicações"],
+        datasets: [
+          {
+            label: "COM TNO",
+            data: [
+              100 - resultados.comTNO.complicacoes,
+              resultados.comTNO.complicacoes,
+            ],
+            backgroundColor: [
+              "rgba(22, 163, 74, 0.8)",
+              "rgba(220, 38, 38, 0.8)",
+            ],
+            borderColor: ["#16a34a", "#dc2626"],
+            borderWidth: 2,
+          },
+          {
+            label: "SEM TNO",
+            data: [
+              100 - resultados.semTNO.complicacoes,
+              resultados.semTNO.complicacoes,
+            ],
+            backgroundColor: [
+              "rgba(22, 163, 74, 0.4)",
+              "rgba(220, 38, 38, 0.4)",
+            ],
+            borderColor: ["#16a34a", "#dc2626"],
+            borderWidth: 2,
+            borderDash: [5, 5],
+          },
         ],
-        backgroundColor: '#3b82f6'
-      },
-      {
-        label: 'Custo TNO',
-        data: [resultados.comTNO.custoTNO, 0],
-        backgroundColor: '#16a34a'
       }
-    ]
-  } : null;
+    : null;
+
+  const costChartData = resultados
+    ? {
+        labels: ["COM TNO", "SEM TNO"],
+        datasets: [
+          {
+            label: "Custo Hospitalar",
+            data: [
+              resultados.comTNO.custo - resultados.comTNO.custoTNO,
+              resultados.semTNO.custo,
+            ],
+            backgroundColor: "#3b82f6",
+          },
+          {
+            label: "Custo TNO",
+            data: [resultados.comTNO.custoTNO, 0],
+            backgroundColor: "#16a34a",
+          },
+        ],
+      }
+    : null;
 
   return (
     <section className="bg-white rounded-xl p-8 mb-5 shadow-md">
@@ -134,27 +162,28 @@ export function Simulacao() {
       </p>
 
       <div className="text-center bg-gradient-to-br from-blue-50 to-cyan-50 p-10 rounded-xl my-8">
-        <h2 className="text-2xl text-blue-600 mb-4">
-          ⚡ Pronto para simular?
-        </h2>
+        <h2 className="text-2xl text-blue-600 mb-4">⚡ Pronto para simular?</h2>
         <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-          Vamos criar <strong>{config.populacao.toLocaleString('pt-BR')} pacientes virtuais</strong> e 
-          simular seus desfechos com e sem TNO. Isso levará alguns segundos...
+          Vamos criar{" "}
+          <strong>
+            {config.populacao.toLocaleString("pt-BR")} pacientes virtuais
+          </strong>{" "}
+          e simular seus desfechos com e sem TNO. Isso levará alguns segundos...
         </p>
-        
+
         <button
           type="button"
           onClick={executeSimulation}
           disabled={isSimulating}
           className="bg-gradient-to-r from-green-600 to-teal-500 text-white px-10 py-4 text-xl font-bold rounded-lg hover:-translate-y-0.5 hover:shadow-xl transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none mb-5"
         >
-          {isSimulating ? '⏳ SIMULANDO...' : '⚡ EXECUTAR SIMULAÇÃO'}
+          {isSimulating ? "⏳ SIMULANDO..." : "⚡ EXECUTAR SIMULAÇÃO"}
         </button>
 
         {isSimulating && (
           <div className="max-w-2xl mx-auto">
             <div className="w-full bg-gray-200 rounded-full h-6 mb-2">
-              <div 
+              <div
                 className="bg-gradient-to-r from-blue-600 to-teal-500 h-6 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
@@ -167,8 +196,10 @@ export function Simulacao() {
       {/* Resultados */}
       {resultados && (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold text-blue-600 mb-6">📊 Resultados da Simulação</h2>
-          
+          <h2 className="text-2xl font-bold text-blue-600 mb-6">
+            📊 Resultados da Simulação
+          </h2>
+
           {/* KPIs */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             {/* Tempo de Internação */}
@@ -191,7 +222,12 @@ export function Simulacao() {
                 </div>
               </div>
               <div className="text-base font-bold text-orange-600 bg-orange-50 p-2 rounded-md text-center">
-                ECONOMIA: {(resultados.semTNO.tempoInternacao - resultados.comTNO.tempoInternacao).toFixed(1)} dias
+                ECONOMIA:{" "}
+                {(
+                  resultados.semTNO.tempoInternacao -
+                  resultados.comTNO.tempoInternacao
+                ).toFixed(1)}{" "}
+                dias
               </div>
             </div>
 
@@ -215,7 +251,12 @@ export function Simulacao() {
                 </div>
               </div>
               <div className="text-base font-bold text-orange-600 bg-orange-50 p-2 rounded-md text-center">
-                ECONOMIA: R$ {((resultados.semTNO.custo - resultados.comTNO.custo) / 1000).toFixed(1)}k
+                ECONOMIA: R${" "}
+                {(
+                  (resultados.semTNO.custo - resultados.comTNO.custo) /
+                  1000
+                ).toFixed(1)}
+                k
               </div>
             </div>
 
@@ -228,12 +269,14 @@ export function Simulacao() {
                 <div className="text-4xl font-bold text-green-600 mb-2">
                   {roi.toFixed(0)}%
                 </div>
-                <div className="text-xs text-gray-600">
-                  ROI em TNO
-                </div>
+                <div className="text-xs text-gray-600">ROI em TNO</div>
               </div>
               <div className="text-sm text-gray-700 bg-blue-50 p-2 rounded-md text-center">
-                Para cada R$ 1 investido, economiza R$ {((resultados.semTNO.custo - resultados.comTNO.custo) / resultados.comTNO.custoTNO).toFixed(1)}
+                Para cada R$ 1 investido, economiza R${" "}
+                {(
+                  (resultados.semTNO.custo - resultados.comTNO.custo) /
+                  resultados.comTNO.custoTNO
+                ).toFixed(1)}
               </div>
             </div>
 
@@ -257,7 +300,14 @@ export function Simulacao() {
                 </div>
               </div>
               <div className="text-base font-bold text-orange-600 bg-orange-50 p-2 rounded-md text-center">
-                REDUÇÃO: {(((resultados.semTNO.complicacoes - resultados.comTNO.complicacoes) / resultados.semTNO.complicacoes) * 100).toFixed(0)}%
+                REDUÇÃO:{" "}
+                {(
+                  ((resultados.semTNO.complicacoes -
+                    resultados.comTNO.complicacoes) /
+                    resultados.semTNO.complicacoes) *
+                  100
+                ).toFixed(0)}
+                %
               </div>
             </div>
           </div>
@@ -270,7 +320,7 @@ export function Simulacao() {
               </h3>
               <div className="h-80">
                 {comparisonChartData && (
-                  <Bar 
+                  <Bar
                     data={comparisonChartData}
                     options={{
                       responsive: true,
@@ -281,16 +331,16 @@ export function Simulacao() {
                           max: 100,
                           title: {
                             display: true,
-                            text: 'Percentual de Pacientes (%)'
-                          }
-                        }
+                            text: "Percentual de Pacientes (%)",
+                          },
+                        },
                       },
                       plugins: {
                         legend: {
                           display: true,
-                          position: 'bottom'
-                        }
-                      }
+                          position: "bottom",
+                        },
+                      },
                     }}
                   />
                 )}
@@ -303,7 +353,7 @@ export function Simulacao() {
               </h3>
               <div className="h-80">
                 {costChartData && (
-                  <Bar 
+                  <Bar
                     data={costChartData}
                     options={{
                       responsive: true,
@@ -314,15 +364,15 @@ export function Simulacao() {
                           stacked: true,
                           title: {
                             display: true,
-                            text: 'Custo (R$)'
-                          }
-                        }
+                            text: "Custo (R$)",
+                          },
+                        },
                       },
                       plugins: {
                         title: {
-                          display: false
-                        }
-                      }
+                          display: false,
+                        },
+                      },
                     }}
                   />
                 )}
@@ -336,11 +386,35 @@ export function Simulacao() {
               ✅ Conclusão Final
             </h3>
             <p className="text-gray-700 leading-relaxed">
-              Com base na simulação, implementar TNO no seu hospital resultaria em uma{' '}
-              <strong>economia líquida de R$ {Math.round(resultados.semTNO.custo - resultados.comTNO.custo).toLocaleString('pt-BR')} por paciente</strong>, 
-              redução de <strong>{(resultados.semTNO.tempoInternacao - resultados.comTNO.tempoInternacao).toFixed(1)} dias de internação</strong> e{' '}
-              <strong>{(((resultados.semTNO.complicacoes - resultados.comTNO.complicacoes) / resultados.semTNO.complicacoes) * 100).toFixed(0)}% menos complicações</strong>. 
-              O ROI de <strong>{roi.toFixed(0)}%</strong> indica que é um investimento altamente recomendado.
+              Com base na simulação, implementar TNO no seu hospital resultaria
+              em uma{" "}
+              <strong>
+                economia líquida de R${" "}
+                {Math.round(
+                  resultados.semTNO.custo - resultados.comTNO.custo,
+                ).toLocaleString("pt-BR")}{" "}
+                por paciente
+              </strong>
+              , redução de{" "}
+              <strong>
+                {(
+                  resultados.semTNO.tempoInternacao -
+                  resultados.comTNO.tempoInternacao
+                ).toFixed(1)}{" "}
+                dias de internação
+              </strong>{" "}
+              e{" "}
+              <strong>
+                {(
+                  ((resultados.semTNO.complicacoes -
+                    resultados.comTNO.complicacoes) /
+                    resultados.semTNO.complicacoes) *
+                  100
+                ).toFixed(0)}
+                % menos complicações
+              </strong>
+              . O ROI de <strong>{roi.toFixed(0)}%</strong> indica que é um
+              investimento altamente recomendado.
             </p>
           </div>
         </div>
