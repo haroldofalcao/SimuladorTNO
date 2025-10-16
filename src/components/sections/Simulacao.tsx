@@ -143,6 +143,7 @@ export function Simulacao() {
         </p>
         
         <button
+          type="button"
           onClick={executeSimulation}
           disabled={isSimulating}
           className="bg-gradient-to-r from-green-600 to-teal-500 text-white px-10 py-4 text-xl font-bold rounded-lg hover:-translate-y-0.5 hover:shadow-xl transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none mb-5"
