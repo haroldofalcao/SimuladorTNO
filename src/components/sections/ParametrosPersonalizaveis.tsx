@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useSimulator } from '@/context/SimulatorContext';
-import { NavigationButtons } from '@/components/NavigationButtons';
+import { NavigationButtons } from "@/components/NavigationButtons";
+import { useSimulator } from "@/context/SimulatorContext";
 
 export function ParametrosPersonalizaveis() {
   const { setCurrentSection, config, updateConfig } = useSimulator();
@@ -24,9 +24,10 @@ export function ParametrosPersonalizaveis() {
           Ajuste fino da simulação
         </h3>
         <p className="text-gray-600 leading-relaxed">
-          Estes parâmetros permitem simular diferentes cenários: eficácia esperada do TNO, 
-          adesão dos pacientes, tamanho da população e custo dos suplementos. 
-          Use os valores padrão ou personalize baseado na sua experiência.
+          Estes parâmetros permitem simular diferentes cenários: eficácia
+          esperada do TNO, adesão dos pacientes, tamanho da população e custo
+          dos suplementos. Use os valores padrão ou personalize baseado na sua
+          experiência.
         </p>
       </div>
 
@@ -37,21 +38,23 @@ export function ParametrosPersonalizaveis() {
         </div>
         <div className="bg-blue-50 p-4 rounded-lg mb-5 border-l-4 border-blue-600">
           <p className="text-gray-700 text-sm">
-            Número de pacientes virtuais que serão simulados. Quanto maior a população, 
-            mais robustos os resultados estatísticos.
+            Número de pacientes virtuais que serão simulados. Quanto maior a
+            população, mais robustos os resultados estatísticos.
           </p>
         </div>
-        
+
         <input
           type="range"
           min={config.ranges.populacao.min}
           max={config.ranges.populacao.max}
           value={config.populacao}
-          onChange={(e) => handleSliderChange('populacao', Number(e.target.value))}
+          onChange={(e) =>
+            handleSliderChange("populacao", Number(e.target.value))
+          }
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
         <div className="text-center text-xl font-bold text-blue-600 bg-white p-2.5 rounded-lg mt-2.5">
-          {config.populacao.toLocaleString('pt-BR')} pacientes
+          {config.populacao.toLocaleString("pt-BR")} pacientes
         </div>
       </div>
 
@@ -62,17 +65,20 @@ export function ParametrosPersonalizaveis() {
         </div>
         <div className="bg-blue-50 p-4 rounded-lg mb-5 border-l-4 border-blue-600">
           <p className="text-gray-700 text-sm">
-            Percentual de melhora nos desfechos clínicos com TNO. Baseado em literatura: 
-            30-50% é conservador, 70-85% é otimista (ideal para pacientes bem selecionados).
+            Percentual de melhora nos desfechos clínicos com TNO. Baseado em
+            literatura: 30-50% é conservador, 70-85% é otimista (ideal para
+            pacientes bem selecionados).
           </p>
         </div>
-        
+
         <input
           type="range"
           min={config.ranges.eficacia.min}
           max={config.ranges.eficacia.max}
           value={config.eficaciaTNO}
-          onChange={(e) => handleSliderChange('eficaciaTNO', Number(e.target.value))}
+          onChange={(e) =>
+            handleSliderChange("eficaciaTNO", Number(e.target.value))
+          }
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
         <div className="text-center text-xl font-bold text-blue-600 bg-white p-2.5 rounded-lg mt-2.5">
@@ -87,18 +93,18 @@ export function ParametrosPersonalizaveis() {
         </div>
         <div className="bg-blue-50 p-4 rounded-lg mb-5 border-l-4 border-blue-600">
           <p className="text-gray-700 text-sm">
-            Percentual de pacientes que aderem completamente ao protocolo TNO. 
-            Adesão depende de sabor, tolerância, educação da equipe e follow-up. 
+            Percentual de pacientes que aderem completamente ao protocolo TNO.
+            Adesão depende de sabor, tolerância, educação da equipe e follow-up.
             60-80% é realista, acima de 85% requer programa estruturado.
           </p>
         </div>
-        
+
         <input
           type="range"
           min={config.ranges.adesao.min}
           max={config.ranges.adesao.max}
           value={config.adesao}
-          onChange={(e) => handleSliderChange('adesao', Number(e.target.value))}
+          onChange={(e) => handleSliderChange("adesao", Number(e.target.value))}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
         <div className="text-center text-xl font-bold text-blue-600 bg-white p-2.5 rounded-lg mt-2.5">
@@ -113,17 +119,19 @@ export function ParametrosPersonalizaveis() {
         </div>
         <div className="bg-blue-50 p-4 rounded-lg mb-5 border-l-4 border-blue-600">
           <p className="text-gray-700 text-sm">
-            Custo médio por dia de suplementação (pode variar por fornecedor e volume). 
-            R$ 25-50 é básico, R$ 50-100 é intermediário, R$ 100+ são fórmulas especializadas.
+            Custo médio por dia de suplementação (pode variar por fornecedor e
+            volume).
           </p>
         </div>
-        
+
         <input
           type="range"
           min={config.ranges.custoTNO.min}
           max={config.ranges.custoTNO.max}
           value={config.custoTNODiario}
-          onChange={(e) => handleSliderChange('custoTNODiario', Number(e.target.value))}
+          onChange={(e) =>
+            handleSliderChange("custoTNODiario", Number(e.target.value))
+          }
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
         <div className="text-center text-xl font-bold text-blue-600 bg-white p-2.5 rounded-lg mt-2.5">
@@ -136,9 +144,10 @@ export function ParametrosPersonalizaveis() {
           💡 Dica de Otimização
         </div>
         <div className="text-orange-900 text-sm">
-          Para maximizar ROI: foque em pacientes de alto risco (idosos, cirúrgicos, desnutridos), 
-          invista em treinamento da equipe para melhorar adesão, e negocie preços com fornecedores 
-          para grandes volumes.
+          Para maximizar ROI: foque em pacientes de alto risco (idosos,
+          cirúrgicos, desnutridos), invista em treinamento da equipe para
+          melhorar adesão, e negocie preços com fornecedores para grandes
+          volumes.
         </div>
       </div>
 
