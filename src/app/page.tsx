@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import DisclaimerPopup from "@/components/DisclaimerPopup";
 import { Header } from "@/components/Header";
@@ -12,7 +13,7 @@ import { Solucao } from "@/components/sections/Solucao";
 import TermosDeUso from "@/components/sections/TermosDeUso";
 import { useSimulator } from "@/context/SimulatorContext";
 
-export default function Home() {
+function HomeContent() {
   const { currentSection } = useSimulator();
   const searchParams = useSearchParams();
   const showDisclaimer = searchParams.get("disclaimer") === "true";
@@ -31,5 +32,13 @@ export default function Home() {
         {currentSection === 7 && <TermosDeUso />}
       </main>
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
