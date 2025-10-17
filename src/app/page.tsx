@@ -1,19 +1,25 @@
-'use client';
+"use client";
 
-import { useSimulator } from '@/context/SimulatorContext';
-import { Header } from '@/components/Header';
-import { Introducao } from '@/components/sections/Introducao';
-import { Solucao } from '@/components/sections/Solucao';
-import { ConfiguracaoHospital } from '@/components/sections/ConfiguracaoHospital';
-import { ParametrosPersonalizaveis } from '@/components/sections/ParametrosPersonalizaveis';
-import { Simulacao } from '@/components/sections/Simulacao';
-import { Referencias } from '@/components/sections/Referencias';
+import { useSearchParams } from "next/navigation";
+import DisclaimerPopup from "@/components/DisclaimerPopup";
+import { Header } from "@/components/Header";
+import { ConfiguracaoHospital } from "@/components/sections/ConfiguracaoHospital";
+import { Introducao } from "@/components/sections/Introducao";
+import { ParametrosPersonalizaveis } from "@/components/sections/ParametrosPersonalizaveis";
+import { Referencias } from "@/components/sections/Referencias";
+import { Simulacao } from "@/components/sections/Simulacao";
+import { Solucao } from "@/components/sections/Solucao";
+import TermosDeUso from "@/components/sections/TermosDeUso";
+import { useSimulator } from "@/context/SimulatorContext";
 
 export default function Home() {
   const { currentSection } = useSimulator();
+  const searchParams = useSearchParams();
+  const showDisclaimer = searchParams.get("disclaimer") === "true";
 
   return (
     <>
+      {showDisclaimer && <DisclaimerPopup />}
       <Header />
       <main className="max-w-7xl mx-auto px-5">
         {currentSection === 1 && <Introducao />}
@@ -22,6 +28,7 @@ export default function Home() {
         {currentSection === 4 && <ParametrosPersonalizaveis />}
         {currentSection === 5 && <Simulacao />}
         {currentSection === 6 && <Referencias />}
+        {currentSection === 7 && <TermosDeUso />}
       </main>
     </>
   );
