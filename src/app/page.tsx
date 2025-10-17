@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import DisclaimerPopup from "@/components/DisclaimerPopup";
 import { Header } from "@/components/Header";
 import { ConfiguracaoHospital } from "@/components/sections/ConfiguracaoHospital";
