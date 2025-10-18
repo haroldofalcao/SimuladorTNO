@@ -89,7 +89,7 @@ export default function LoginModal() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Simulador TNO</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Nutri Economics</h2>
           <p className="text-gray-600">Insira o código do evento para acessar</p>
         </div>
 
