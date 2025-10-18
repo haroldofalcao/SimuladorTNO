@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function DisclaimerPopup() {
   const router = useRouter();
@@ -14,6 +15,13 @@ export default function DisclaimerPopup() {
     // Redirecionar para URL sem search params
     router.push("/");
   };
+
+    useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 md:p-6 animate-in fade-in duration-300">
