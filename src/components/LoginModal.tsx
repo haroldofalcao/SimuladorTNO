@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { loginAction } from "@/app/actions/auth";
+import { modalManager } from "@/lib/modal-manager";
 
 export default function LoginModal() {
   const router = useRouter();
@@ -17,13 +18,11 @@ export default function LoginModal() {
   // Prevenir scroll quando o modal está aberto
   useEffect(() => {
     if (showLogin) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
+      modalManager.open();
+      return () => {
+        modalManager.close();
+      };
     }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
   }, [showLogin]);
 
   if (!showLogin) return null;

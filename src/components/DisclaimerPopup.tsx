@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { modalManager } from "@/lib/modal-manager";
 
 export default function DisclaimerPopup() {
   const router = useRouter();
@@ -16,10 +17,10 @@ export default function DisclaimerPopup() {
     router.push("/");
   };
 
-    useEffect(() => {
-    document.body.style.overflow = "hidden";
+  useEffect(() => {
+    modalManager.open();
     return () => {
-      document.body.style.overflow = "unset";
+      modalManager.close();
     };
   }, []);
 
