@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-export function DisclaimerPopup() {
+export default function DisclaimerPopup() {
   const router = useRouter();
 
   const handleAccept = () => {
