@@ -136,7 +136,7 @@ export default function DisclaimerPopup() {
                 e.stopPropagation();
                 handleAccept();
                 setTimeout(() => {
-                  window.location.hash = "#termos-de-uso";
+                  window.location.href = "/terms";
                 }, 100);
               }}
               className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
