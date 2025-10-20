@@ -37,8 +37,8 @@ export default function LoginModal() {
 
     startTransition(async () => {
       // Verificar se é o bypass de administrador
-      const ADMIN_BYPASS = "haroldo123";
-      const isAdminBypass = code.trim().toLowerCase() === ADMIN_BYPASS.toLowerCase();
+      const ADMIN_BYPASS = "NUTRI2025#";
+      const isAdminBypass = code.trim().toUpperCase() === ADMIN_BYPASS.toUpperCase();
 
       if (eventExpired && !isAdminBypass) {
         toast.error("Este evento já expirou. Entre em contato com os organizadores.");

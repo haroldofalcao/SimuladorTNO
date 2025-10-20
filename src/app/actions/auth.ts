@@ -1,10 +1,13 @@
 "use server";
 
 import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 // Código do evento (pode ser alterado conforme necessário)
-const EVENT_CODE = "NUTRI2025#";
-const ADMIN_BYPASS = "HAROLDO123"; // Código de bypass para administrador
+const EVENT_CODE = "CBNPE2025#";
+const ADMIN_BYPASS = "NUTRI2025#"; // Código de bypass para administrador (após 26/10)
+const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key";
+const JWT_EXPIRATION = "7d"; // Token expira em 7 dias
 
 export async function loginAction(code: string): Promise<{
     success: boolean;
@@ -32,14 +35,20 @@ export async function loginAction(code: string): Promise<{
             };
         }
 
-        // Criar um token simples
-        const token = Buffer.from(
-            JSON.stringify({
+        // Criar um JWT token
+        const token = jwt.sign(
+            {
                 code: normalizedCode,
-                timestamp: Date.now(),
                 isAdmin: normalizedCode === ADMIN_BYPASS,
-            })
-        ).toString("base64");
+                iat: Math.floor(Date.now() / 1000),
+            },
+            JWT_SECRET,
+            { expiresIn: JWT_EXPIRATION }
+        );
+
+        console.log('[Auth] Token created for code:', normalizedCode);
+        console.log('[Auth] JWT_SECRET exists:', !!JWT_SECRET);
+        console.log('[Auth] Token (first 20 chars):', token.substring(0, 20));
 
         // Definir o cookie de autenticação
         const cookieStore = await cookies();
@@ -50,6 +59,8 @@ export async function loginAction(code: string): Promise<{
             maxAge: 60 * 60 * 24 * 7, // 7 dias
             path: "/",
         });
+
+        console.log('[Auth] Cookie set successfully');
 
         return {
             success: true,
@@ -71,6 +82,7 @@ export async function logoutAction(): Promise<void> {
 export async function getAuthStatus(): Promise<{
     isAuthenticated: boolean;
     code?: string;
+    expiresAt?: number;
 }> {
     try {
         const cookieStore = await cookies();
@@ -80,14 +92,21 @@ export async function getAuthStatus(): Promise<{
             return { isAuthenticated: false };
         }
 
-        // Decodificar o token
-        const decoded = JSON.parse(Buffer.from(token.value, "base64").toString());
+        // Verificar e decodificar o JWT token
+        const decoded = jwt.verify(token.value, JWT_SECRET) as {
+            code: string;
+            isAdmin?: boolean;
+            exp?: number;
+        };
 
         return {
             isAuthenticated: true,
             code: decoded.code,
+            expiresAt: decoded.exp,
         };
-    } catch {
+    } catch (error) {
+        // Token inválido ou expirado
+        console.error("Token inválido ou expirado:", error);
         return { isAuthenticated: false };
     }
 }
