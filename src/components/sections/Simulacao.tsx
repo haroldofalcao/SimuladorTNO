@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { NavigationButtons } from "@/components/NavigationButtons";
 import { useSimulator } from "@/context/SimulatorContext";
+import { useAnalytics } from "@/lib/analytics";
 
 ChartJS.register(
   CategoryScale,
@@ -24,6 +25,7 @@ ChartJS.register(
 );
 
 export function Simulacao() {
+  const analytics = useAnalytics();
   const {
     setCurrentSection,
     config,
@@ -38,6 +40,16 @@ export function Simulacao() {
 
   const executeSimulation = async () => {
     setIsSimulating(true);
+
+    // Track simulation start
+    analytics.trackSimulationRun({
+      hospitalType: config.hospitalType,
+      patientType: config.patientType,
+      populacao: config.populacao,
+      eficaciaTNO: config.eficaciaTNO,
+      adesao: config.adesao,
+      custoTNODiario: config.custoTNODiario,
+    });
 
     const steps = [
       { progress: 20, text: "Configurando parâmetros do hospital..." },
@@ -70,7 +82,7 @@ export function Simulacao() {
     const complicacoesComTNO = 18 * (1 - eficaciaAjustada * 0.4);
     const complicacoesSemTNO = 28;
 
-    setResultados({
+    const simulationResults = {
       comTNO: {
         tempoInternacao: tempoComTNO,
         custo: custoComTNO,
@@ -82,6 +94,21 @@ export function Simulacao() {
         custo: custoSemTNO,
         complicacoes: complicacoesSemTNO,
       },
+    };
+
+    setResultados(simulationResults);
+
+    // Track simulation completion with results
+    const calculatedRoi = ((simulationResults.semTNO.custo -
+      simulationResults.comTNO.custo -
+      simulationResults.comTNO.custoTNO) /
+      simulationResults.comTNO.custoTNO) * 100;
+
+    analytics.trackSimulationResults({
+      roi: calculatedRoi,
+      economiaTotal: simulationResults.semTNO.custo - simulationResults.comTNO.custo,
+      diasHospitalizacao: simulationResults.semTNO.tempoInternacao - simulationResults.comTNO.tempoInternacao,
+      custoTNO: simulationResults.comTNO.custoTNO,
     });
 
     setIsSimulating(false);

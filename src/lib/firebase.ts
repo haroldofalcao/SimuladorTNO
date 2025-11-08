@@ -10,8 +10,8 @@ const firebaseConfig = {
     projectId: "nutripath-9ac89",
     storageBucket: "nutripath-9ac89.firebasestorage.app",
     messagingSenderId: "861502942591",
-    appId: "1:861502942591:web:5b6640368f8ed793887e4a",
-    measurementId: "G-0XLD34WSDQ"
+    appId: "1:861502942591:web:6226d6a738e428f9887e4a",
+    measurementId: "G-KK0T1BBMMD"
 };
 
 // Initialize Firebase

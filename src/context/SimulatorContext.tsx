@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useState } from "react";
+import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
 import type {
   Config,
   HospitalType,
   PatientType,
   SimulationResults,
 } from "@/types";
+import { useAnalytics } from "@/lib/analytics";
 
 interface SimulatorContextType {
   currentSection: number;
@@ -69,6 +70,7 @@ const patientData: Record<string, PatientType> = {
 };
 
 export function SimulatorProvider({ children }: { children: ReactNode }) {
+  const analytics = useAnalytics();
   const [currentSection, setCurrentSection] = useState(1);
   const [resultados, setResultados] = useState<SimulationResults | null>(null);
   const [config, setConfig] = useState<Config>({
@@ -88,7 +90,27 @@ export function SimulatorProvider({ children }: { children: ReactNode }) {
 
   const updateConfig = (updates: Partial<Config>) => {
     setConfig((prev) => ({ ...prev, ...updates }));
+    
+    // Track config changes
+    Object.entries(updates).forEach(([key, value]) => {
+      analytics.trackConfigChange(key, value as string | number);
+    });
   };
+
+  // Track section changes
+  useEffect(() => {
+    const sectionNames = [
+      "",
+      "Introdução",
+      "Solução",
+      "Configuração Hospital",
+      "Parâmetros",
+      "Simulação",
+      "Referências",
+      "Termos de Uso"
+    ];
+    analytics.trackSectionChange(currentSection, sectionNames[currentSection] || "Unknown");
+  }, [currentSection, analytics]);
 
   return (
     <SimulatorContext.Provider

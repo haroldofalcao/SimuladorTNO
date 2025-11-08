@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import DisclaimerPopup from "@/components/DisclaimerPopup";
 import { Header } from "@/components/Header";
 import { ConfiguracaoHospital } from "@/components/sections/ConfiguracaoHospital";
@@ -12,11 +12,18 @@ import { Simulacao } from "@/components/sections/Simulacao";
 import { Solucao } from "@/components/sections/Solucao";
 import TermosDeUso from "@/components/sections/TermosDeUso";
 import { useSimulator } from "@/context/SimulatorContext";
+import { useAnalytics } from "@/lib/analytics";
 
 function HomeContent() {
   const { currentSection } = useSimulator();
+  const analytics = useAnalytics();
   const searchParams = useSearchParams();
   const showDisclaimer = searchParams.get("disclaimer") === "true";
+
+  // Track page view on mount
+  useEffect(() => {
+    analytics.trackPageView("Simulador TNO");
+  }, [analytics]);
 
   return (
     <>
