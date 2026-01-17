@@ -2,6 +2,7 @@ export interface HospitalType {
     name: string;
     costRange: { min: number; max: number };
     avgDaily: number;
+    avgComplicationCost: number;
     description: string;
 }
 
@@ -10,6 +11,9 @@ export interface PatientType {
     avgLOS: number;
     responseRate: number;
     baseROI: number;
+    baseComplicationRate: number;
+    complicationReductionFactor: number;
+    losReductionFactor: number;
     description: string;
 }
 

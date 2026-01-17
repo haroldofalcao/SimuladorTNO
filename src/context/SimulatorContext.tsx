@@ -24,23 +24,25 @@ const SimulatorContext = createContext<SimulatorContextType | undefined>(
   undefined,
 );
 
-const hospitalData: Record<string, HospitalType> = {
   publico: {
     name: "Hospital Público/SUS",
     costRange: { min: 196, max: 680 },
     avgDaily: 380,
+    avgComplicationCost: 1500,
     description: "Foco em custo-efetividade e atendimento universal",
   },
   privado: {
     name: "Hospital Privado",
     costRange: { min: 359, max: 5000 },
     avgDaily: 1200,
+    avgComplicationCost: 5000,
     description: "Convênios e particulares com alto padrão",
   },
   misto: {
     name: "Hospital Misto",
     costRange: { min: 280, max: 950 },
     avgDaily: 600,
+    avgComplicationCost: 3000,
     description: "Atende SUS e convênios/particulares",
   },
 };
@@ -51,6 +53,9 @@ const patientData: Record<string, PatientType> = {
     avgLOS: 6,
     responseRate: 0.85,
     baseROI: 550,
+    baseComplicationRate: 28,
+    complicationReductionFactor: 0.45,
+    losReductionFactor: 0.3,
     description: "Foco em cicatrização e recuperação pós-operatória",
   },
   clinico: {
@@ -58,6 +63,9 @@ const patientData: Record<string, PatientType> = {
     avgLOS: 14,
     responseRate: 0.78,
     baseROI: 800,
+    baseComplicationRate: 35,
+    complicationReductionFactor: 0.35,
+    losReductionFactor: 0.25,
     description: "Patologias complexas e internações prolongadas",
   },
   misto: {
@@ -65,6 +73,9 @@ const patientData: Record<string, PatientType> = {
     avgLOS: 10,
     responseRate: 0.81,
     baseROI: 675,
+    baseComplicationRate: 30,
+    complicationReductionFactor: 0.4,
+    losReductionFactor: 0.28,
     description: "Mistura equilibrada de ambos os perfis",
   },
 };

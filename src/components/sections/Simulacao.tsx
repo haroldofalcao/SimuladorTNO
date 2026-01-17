@@ -70,45 +70,66 @@ export function Simulacao() {
     const patientConfig = patientData[config.patientType];
 
     const custoDiario = hospitalConfig.avgDaily;
+    const custoComplicacao = hospitalConfig.avgComplicationCost;
+
+    // Ajuste de eficácia baseado na adesão
     const eficaciaAjustada = (config.eficaciaTNO / 100) * (config.adesao / 100);
 
-    const tempoComTNO = patientConfig.avgLOS * (1 - eficaciaAjustada * 0.3);
+    // 1. Cálculos de Tempo de Internação (LOS)
+    const reductionLOS = eficaciaAjustada * patientConfig.losReductionFactor;
     const tempoSemTNO = patientConfig.avgLOS;
+    const tempoComTNO = patientConfig.avgLOS * (1 - reductionLOS);
 
-    const custoComTNO =
-      tempoComTNO * custoDiario + tempoComTNO * config.custoTNODiario;
-    const custoSemTNO = tempoSemTNO * custoDiario;
+    // 2. Cálculos de Complicações
+    // Taxa base (Sem TNO) vs. Taxa reduzida (Com TNO)
+    const taxaComplicacaoSemTNO = patientConfig.baseComplicationRate;
+    const reductionComplicacao = eficaciaAjustada * patientConfig.complicationReductionFactor;
+    const taxaComplicacaoComTNO = taxaComplicacaoSemTNO * (1 - reductionComplicacao);
 
-    const complicacoesComTNO = 18 * (1 - eficaciaAjustada * 0.4);
-    const complicacoesSemTNO = 28;
+    // 3. Cálculos Financeiros
+    const custoHospitalarSemTNO = tempoSemTNO * custoDiario;
+    const custoHospitalarComTNO = tempoComTNO * custoDiario;
+
+    const custoTNO = tempoComTNO * config.custoTNODiario;
+
+    // Custo ponderado das complicações (Taxa * Custo Unitário)
+    // Assume-se que a taxa é a probabilidade de um evento custoso
+    const custoComplicacoesSemTNO = (taxaComplicacaoSemTNO / 100) * custoComplicacao;
+    const custoComplicacoesComTNO = (taxaComplicacaoComTNO / 100) * custoComplicacao;
+
+    const custoTotalSemTNO = custoHospitalarSemTNO + custoComplicacoesSemTNO;
+    const custoTotalComTNO = custoHospitalarComTNO + custoTNO + custoComplicacoesComTNO;
 
     const simulationResults = {
       comTNO: {
         tempoInternacao: tempoComTNO,
-        custo: custoComTNO,
-        custoTNO: tempoComTNO * config.custoTNODiario,
-        complicacoes: complicacoesComTNO,
+        custo: custoTotalComTNO,
+        custoTNO: custoTNO,
+        complicacoes: taxaComplicacaoComTNO,
       },
       semTNO: {
         tempoInternacao: tempoSemTNO,
-        custo: custoSemTNO,
-        complicacoes: complicacoesSemTNO,
+        custo: custoTotalSemTNO,
+        complicacoes: taxaComplicacaoSemTNO,
       },
     };
 
     setResultados(simulationResults);
 
     // Track simulation completion with results
-    const calculatedRoi = ((simulationResults.semTNO.custo -
-      simulationResults.comTNO.custo -
-      simulationResults.comTNO.custoTNO) /
-      simulationResults.comTNO.custoTNO) * 100;
+    const economiaTotal = custoTotalSemTNO - custoTotalComTNO;
+    // ROI = (Economia Líquida / Investimento) * 100
+    // Economia Líquida = (Custo Total Sem TNO) - (Custo Total Com TNO)
+    // *Importante*: O custoTotalComTNO já inclui o custo do TNO.
+    // Então Lucro = CustoSem - CustoCom.
+    // Investimento = CustoTNO.
+    const calculatedRoi = (economiaTotal / custoTNO) * 100;
 
     analytics.trackSimulationResults({
       roi: calculatedRoi,
-      economiaTotal: simulationResults.semTNO.custo - simulationResults.comTNO.custo,
-      diasHospitalizacao: simulationResults.semTNO.tempoInternacao - simulationResults.comTNO.tempoInternacao,
-      custoTNO: simulationResults.comTNO.custoTNO,
+      economiaTotal: economiaTotal,
+      diasHospitalizacao: tempoSemTNO - tempoComTNO,
+      custoTNO: custoTNO,
     });
 
     setIsSimulating(false);
@@ -116,67 +137,65 @@ export function Simulacao() {
   };
 
   const roi = resultados
-    ? ((resultados.semTNO.custo -
-        resultados.comTNO.custo -
-        resultados.comTNO.custoTNO) /
-        resultados.comTNO.custoTNO) *
-      100
+    ? ((resultados.semTNO.custo - resultados.comTNO.custo) /
+      resultados.comTNO.custoTNO) *
+    100
     : 0;
 
   const comparisonChartData = resultados
     ? {
-        labels: ["Alta Segura", "Complicações"],
-        datasets: [
-          {
-            label: "COM TNO",
-            data: [
-              100 - resultados.comTNO.complicacoes,
-              resultados.comTNO.complicacoes,
-            ],
-            backgroundColor: [
-              "rgba(22, 163, 74, 0.8)",
-              "rgba(220, 38, 38, 0.8)",
-            ],
-            borderColor: ["#16a34a", "#dc2626"],
-            borderWidth: 2,
-          },
-          {
-            label: "SEM TNO",
-            data: [
-              100 - resultados.semTNO.complicacoes,
-              resultados.semTNO.complicacoes,
-            ],
-            backgroundColor: [
-              "rgba(22, 163, 74, 0.4)",
-              "rgba(220, 38, 38, 0.4)",
-            ],
-            borderColor: ["#16a34a", "#dc2626"],
-            borderWidth: 2,
-            borderDash: [5, 5],
-          },
-        ],
-      }
+      labels: ["Alta Segura", "Complicações"],
+      datasets: [
+        {
+          label: "COM TNO",
+          data: [
+            100 - resultados.comTNO.complicacoes,
+            resultados.comTNO.complicacoes,
+          ],
+          backgroundColor: [
+            "rgba(22, 163, 74, 0.8)",
+            "rgba(220, 38, 38, 0.8)",
+          ],
+          borderColor: ["#16a34a", "#dc2626"],
+          borderWidth: 2,
+        },
+        {
+          label: "SEM TNO",
+          data: [
+            100 - resultados.semTNO.complicacoes,
+            resultados.semTNO.complicacoes,
+          ],
+          backgroundColor: [
+            "rgba(22, 163, 74, 0.4)",
+            "rgba(220, 38, 38, 0.4)",
+          ],
+          borderColor: ["#16a34a", "#dc2626"],
+          borderWidth: 2,
+          borderDash: [5, 5],
+        },
+      ],
+    }
     : null;
 
   const costChartData = resultados
     ? {
-        labels: ["COM TNO", "SEM TNO"],
-        datasets: [
-          {
-            label: "Custo Hospitalar",
-            data: [
-              resultados.comTNO.custo - resultados.comTNO.custoTNO,
-              resultados.semTNO.custo,
-            ],
-            backgroundColor: "#3b82f6",
-          },
-          {
-            label: "Custo TNO",
-            data: [resultados.comTNO.custoTNO, 0],
-            backgroundColor: "#16a34a",
-          },
-        ],
-      }
+      labels: ["COM TNO", "SEM TNO"],
+      datasets: [
+        {
+          label: "Custo Hospitalar",
+          data: [
+            resultados.comTNO.custo - resultados.comTNO.custoTNO,
+            resultados.semTNO.custo,
+          ],
+          backgroundColor: "#3b82f6",
+        },
+        {
+          label: "Custo TNO",
+          data: [resultados.comTNO.custoTNO, 0],
+          backgroundColor: "#16a34a",
+        },
+      ],
+    }
     : null;
 
   return (
