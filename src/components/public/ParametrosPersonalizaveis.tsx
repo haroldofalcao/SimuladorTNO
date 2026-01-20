@@ -1,6 +1,7 @@
 "use client";
 
 import { NavigationButtons } from "@/components/shared/NavigationButtons";
+import { Tooltip } from "@/components/shared/Tooltip";
 import { useSimulator } from "@/context/SimulatorContext";
 
 export function ParametrosPersonalizaveis() {
@@ -60,8 +61,13 @@ export function ParametrosPersonalizaveis() {
 
       {/* Eficácia TNO */}
       <div className="bg-gray-50 p-6 rounded-xl mb-5">
-        <div className="font-semibold text-blue-600 mb-4 text-lg">
+        <div className="font-semibold text-blue-600 mb-4 text-lg flex items-center gap-2">
           📈 Eficácia Esperada do TNO
+          <Tooltip content="Ref: Philipson TJ et al. Impact of oral nutritional supplementation on hospital outcomes. Am J Manag Care. 2013.">
+            <span className="cursor-help text-gray-400 hover:text-blue-500 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            </span>
+          </Tooltip>
         </div>
         <div className="bg-blue-50 p-4 rounded-lg mb-5 border-l-4 border-blue-600">
           <p className="text-gray-700 text-sm">
@@ -88,8 +94,13 @@ export function ParametrosPersonalizaveis() {
 
       {/* Adesão */}
       <div className="bg-gray-50 p-6 rounded-xl mb-5">
-        <div className="font-semibold text-blue-600 mb-4 text-lg">
+        <div className="font-semibold text-blue-600 mb-4 text-lg flex items-center gap-2">
           ✅ Taxa de Adesão ao Protocolo
+          <Tooltip content="Ref: Hubbard GP et al. A systematic review of compliance to oral nutritional supplements. Clin Nutr. 2012.">
+            <span className="cursor-help text-gray-400 hover:text-blue-500 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            </span>
+          </Tooltip>
         </div>
         <div className="bg-blue-50 p-4 rounded-lg mb-5 border-l-4 border-blue-600">
           <p className="text-gray-700 text-sm">

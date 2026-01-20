@@ -5,13 +5,13 @@ import { getStorage } from 'firebase/storage';
 import { getAnalytics, Analytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBe65fTFrWVJtQ1xgjpLeE3H0qaKzapMR8",
-    authDomain: "nutripath-9ac89.firebaseapp.com",
-    projectId: "nutripath-9ac89",
-    storageBucket: "nutripath-9ac89.firebasestorage.app",
-    messagingSenderId: "861502942591",
-    appId: "1:861502942591:web:6226d6a738e428f9887e4a",
-    measurementId: "G-KK0T1BBMMD"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
