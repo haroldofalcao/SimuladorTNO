@@ -21,6 +21,7 @@
     ***Opção A (Incluso):** Os custos de servidor estão inclusos na mensalidade de manutenção até o limite de X acessos/mês.
     *   **Opção B (Repasse):** Custos excedentes de tráfego/armazenamento serão faturados à parte.
 2.4. **Dados:** A LICENCIADA é proprietária dos DADOS gerados pelos seus usuários (pacientes/médicos), e a LICENCIANTE atua como operadora desses dados conforme a LGPD.
+2.5. **Inteligência de Dados:** A LICENCIANTE poderá utilizar dados anonimizados e agregados para fins estatísticos e de aprimoramento da plataforma ("Inteligência Agregada"), sem identificar a LICENCIADA ou seus usuários finais.
 
 ## 3. VALORES E PAGAMENTOS
 
@@ -29,6 +30,7 @@
 3.3. **Sustentação Técnica (Mensal):** R$ 3.500,00/mês.
     *Inclui: Monitoramento de uptime, correção de bugs e atualizações de segurança.
     *   Não inclui: Desenvolvimento de novas funcionalidades (serão orçadas à parte).
+3.4. **Reajuste:** Os valores estipulados neste contrato serão reajustados anualmente pela variação positiva do IPCA/IBGE acumulado no período.
 
 ## 4. DA EXCLUSIVIDADE
 
@@ -39,6 +41,29 @@
 
 5.1. **Disponibilidade:** A LICENCIANTE garante disponibilidade de 99,0% ao mês.
 5.2. **Suporte:** Atendimento a chamados críticos em até 24h úteis.
+5.3. **Penalidades (SLA):** O descumprimento da meta de disponibilidade (99,0%) garantirá à LICENCIADA um desconto de 5% na mensalidade do mês subsequente para cada 1% abaixo da meta, limitado a 50% do valor mensal.
+
+## 6. DA CONFIDENCIALIDADE
+
+6.1. As partes comprometem-se a manter o mais absoluto sigilo sobre quaisquer dados, informações técnicas, comerciais ou estratégicas a que tiverem acesso em razão deste contrato ("Informações Confidenciais").
+6.2. Esta obrigação de confidencialidade perdurará pela vigência deste contrato e por um período de 5 (cinco) anos após o seu encerramento.
+
+## 7. DA LIMITAÇÃO DE RESPONSABILIDADE
+
+7.1. Em nenhuma hipótese a LICENCIANTE será responsável por danos indiretos, incidentais, especiais, punitivos ou lucros cessantes.
+7.2. A responsabilidade total da LICENCIANTE por quaisquer danos relacionados a este contrato, seja por contrato, ato ilícito ou qualquer outra teoria legal, limita-se ao valor efetivamente pago pela LICENCIADA nos 12 (doze) meses anteriores ao evento gerador do dano.
+
+## 8. DA VIGÊNCIA E RESCISÃO
+
+8.1. **Vigência:** O presente contrato entra em vigor na data de sua assinatura e terá validade de 12 (doze) meses, sendo renovado automaticamente por iguais períodos, salvo manifestação em contrário.
+8.2. **Rescisão Imotivada:** Qualquer das partes poderá rescindir este contrato mediante aviso prévio por escrito de 60 (sessenta) dias.
+    *Em caso de rescisão antecipada por parte da LICENCIADA antes do término do período anual vigente, será devida uma multa equivalente a 50% do valor das parcelas mensais restantes.
+    *   A Taxa de Setup (Cláusula 3.1) não é reembolsável em nenhuma hipótese.
+8.3. **Rescisão Motivada:** O contrato poderá ser rescindido imediatamente em caso de violação de suas cláusulas, falência ou recuperação judicial de qualquer das partes.
+
+## 9. DO FORO
+
+9.1. Fica eleito o Foro da Comarca da Capital do Estado da LICENCIANTE para dirimir quaisquer dúvidas ou litígios oriundos deste contrato, com renúncia a qualquer outro, por mais privilegiado que seja.
 
 ---
 
