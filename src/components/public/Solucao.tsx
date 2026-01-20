@@ -1,7 +1,7 @@
 'use client';
 
 import { useSimulator } from '@/context/SimulatorContext';
-import { NavigationButtons } from '@/components/NavigationButtons';
+import { NavigationButtons } from '@/components/shared/NavigationButtons';
 
 export function Solucao() {
   const { setCurrentSection } = useSimulator();
@@ -20,8 +20,8 @@ export function Solucao() {
           O que é TNO?
         </h3>
         <p className="text-gray-600 leading-relaxed">
-          A Terapia Nutricional Oral são suplementos nutricionais de alta densidade calórica e proteica, 
-          consumidos via oral. São práticos, saborosos e cientificamente formulados para pacientes 
+          A Terapia Nutricional Oral são suplementos nutricionais de alta densidade calórica e proteica,
+          consumidos via oral. São práticos, saborosos e cientificamente formulados para pacientes
           hospitalizados que não conseguem atingir suas necessidades nutricionais apenas com a dieta.
         </p>
       </div>
@@ -48,9 +48,9 @@ export function Solucao() {
           📊 Evidências de Custo-Efetividade
         </div>
         <div className="text-orange-900 text-sm">
-          Estudos econômicos brasileiros demonstram que TNO reduz custos hospitalares em 15-35%. 
-          O custo adicional da suplementação (R$ 25-75/dia) é amplamente compensado pela redução 
-          de complicações (economia de R$ 15.000+), menor tempo de internação (R$ 380-1.200/dia) 
+          Estudos econômicos brasileiros demonstram que TNO reduz custos hospitalares em 15-35%.
+          O custo adicional da suplementação (R$ 25-75/dia) é amplamente compensado pela redução
+          de complicações (economia de R$ 15.000+), menor tempo de internação (R$ 380-1.200/dia)
           e menor taxa de reinternação.
         </div>
       </div>

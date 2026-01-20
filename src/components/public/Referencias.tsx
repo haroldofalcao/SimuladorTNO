@@ -1,7 +1,7 @@
 'use client';
 
 import { useSimulator } from '@/context/SimulatorContext';
-import { NavigationButtons } from '@/components/NavigationButtons';
+import { NavigationButtons } from '@/components/shared/NavigationButtons';
 
 export function Referencias() {
   const { setCurrentSection } = useSimulator();
@@ -20,7 +20,7 @@ export function Referencias() {
           Embasamento Científico
         </h3>
         <p className="text-gray-600 leading-relaxed">
-          Este simulador é baseado em evidências científicas de alta qualidade: meta-análises, 
+          Este simulador é baseado em evidências científicas de alta qualidade: meta-análises,
           ensaios clínicos randomizados e diretrizes internacionais publicadas nos últimos 10 anos.
         </p>
       </div>
@@ -30,8 +30,8 @@ export function Referencias() {
           🔬 Evidências Clínicas
         </div>
         <div className="text-purple-900 text-sm">
-          Estudos demonstram que TNO reduz mortalidade, complicações e tempo de internação 
-          em populações cirúrgicas, clínicas e geriátricas. Os efeitos são dose-dependentes 
+          Estudos demonstram que TNO reduz mortalidade, complicações e tempo de internação
+          em populações cirúrgicas, clínicas e geriátricas. Os efeitos são dose-dependentes
           e maximizados quando iniciados precocemente.
         </div>
       </div>
@@ -41,8 +41,8 @@ export function Referencias() {
           💰 Estudos de Custo-Efetividade
         </div>
         <div className="text-orange-900 text-sm">
-          Análises econômicas brasileiras e internacionais confirmam que TNO é custo-efetivo, 
-          com ROI positivo em 6-12 meses. O investimento inicial é compensado pela redução 
+          Análises econômicas brasileiras e internacionais confirmam que TNO é custo-efetivo,
+          com ROI positivo em 6-12 meses. O investimento inicial é compensado pela redução
           de complicações e reinternações.
         </div>
       </div>
@@ -54,19 +54,19 @@ export function Referencias() {
         </h3>
         <ul className="list-disc list-inside space-y-3 text-gray-700">
           <li>
-            <strong>Stratton et al. (2003)</strong> - Disease-Related Malnutrition: An Evidence-Based Approach to Treatment. 
+            <strong>Stratton et al. (2003)</strong> - Disease-Related Malnutrition: An Evidence-Based Approach to Treatment.
             CABI Publishing.
           </li>
           <li>
-            <strong>Elia et al. (2016)</strong> - A systematic review of the cost and cost effectiveness of using standard oral 
+            <strong>Elia et al. (2016)</strong> - A systematic review of the cost and cost effectiveness of using standard oral
             nutritional supplements in community and care home settings. Clinical Nutrition, 35(1), 125-137.
           </li>
           <li>
-            <strong>Philipson et al. (2013)</strong> - The economic value of oral nutritional supplements in hospitalized patients. 
+            <strong>Philipson et al. (2013)</strong> - The economic value of oral nutritional supplements in hospitalized patients.
             American Journal of Managed Care, 19(2), 121-128.
           </li>
           <li>
-            <strong>Schuetz et al. (2019)</strong> - Individualised nutritional support in medical inpatients at nutritional risk: 
+            <strong>Schuetz et al. (2019)</strong> - Individualised nutritional support in medical inpatients at nutritional risk:
             a randomised clinical trial. The Lancet, 393(10188), 2312-2321.
           </li>
         </ul>
@@ -79,14 +79,14 @@ export function Referencias() {
         </h3>
         <ul className="list-disc list-inside space-y-3 text-gray-700">
           <li>
-            <strong>Cochrane Database</strong> - Nutritional supplementation for hip fracture aftercare in older people 
+            <strong>Cochrane Database</strong> - Nutritional supplementation for hip fracture aftercare in older people
             (redução de 52% em complicações)
           </li>
           <li>
             <strong>ESPEN Guidelines</strong> - Clinical nutrition in surgery (recomendação grau A para TNO perioperatória)
           </li>
           <li>
-            <strong>Baldwin et al. (2016)</strong> - Oral nutritional interventions in malnourished patients with cancer: 
+            <strong>Baldwin et al. (2016)</strong> - Oral nutritional interventions in malnourished patients with cancer:
             a systematic review and meta-analysis
           </li>
         </ul>
@@ -112,11 +112,11 @@ export function Referencias() {
         </h3>
         <ul className="list-disc list-inside space-y-3 text-gray-700">
           <li>
-            <strong>IBRANUTRI</strong> - Inquérito Brasileiro de Avaliação Nutricional Hospitalar 
+            <strong>IBRANUTRI</strong> - Inquérito Brasileiro de Avaliação Nutricional Hospitalar
             (prevalência de 48% de desnutrição)
           </li>
           <li>
-            <strong>Waitzberg et al.</strong> - Hospital malnutrition: the Brazilian national survey (IBRANUTRI): 
+            <strong>Waitzberg et al.</strong> - Hospital malnutrition: the Brazilian national survey (IBRANUTRI):
             a study of 4000 patients
           </li>
         </ul>
@@ -144,7 +144,7 @@ export function Referencias() {
           ⚠️ Limitações e Considerações
         </h3>
         <p className="text-gray-600 leading-relaxed mb-3">
-          Este simulador é uma ferramenta educacional baseada em médias populacionais. 
+          Este simulador é uma ferramenta educacional baseada em médias populacionais.
           Resultados individuais podem variar. Recomenda-se:
         </p>
         <ul className="list-disc list-inside text-gray-600 space-y-1">

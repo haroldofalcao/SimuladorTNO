@@ -5,6 +5,7 @@ interface NavigationButtonsProps {
   onPrevious?: () => void;
   showNext?: boolean;
   showPrevious?: boolean;
+  className?: string;
 }
 
 export function NavigationButtons({
@@ -12,9 +13,10 @@ export function NavigationButtons({
   onPrevious,
   showNext = true,
   showPrevious = true,
+  className,
 }: NavigationButtonsProps) {
   return (
-    <div className="flex justify-between mt-8">
+    <div className={`flex justify-between mt-8 ${className || ""}`}>
       {showPrevious ? (
         <button
           type="button"

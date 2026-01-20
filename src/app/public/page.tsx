@@ -2,15 +2,15 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
-import DisclaimerPopup from "@/components/DisclaimerPopup";
-import { Header } from "@/components/Header";
-import { ConfiguracaoHospital } from "@/components/sections/ConfiguracaoHospital";
-import { Introducao } from "@/components/sections/Introducao";
-import { ParametrosPersonalizaveis } from "@/components/sections/ParametrosPersonalizaveis";
-import { Referencias } from "@/components/sections/Referencias";
-import { Simulacao } from "@/components/sections/Simulacao";
-import { Solucao } from "@/components/sections/Solucao";
-import TermosDeUso from "@/components/sections/TermosDeUso";
+import DisclaimerPopup from "@/components/shared/DisclaimerPopup";
+import { Header } from "@/components/shared/Header";
+import { ConfiguracaoHospital } from "@/components/public/ConfiguracaoHospital";
+import { Introducao } from "@/components/public/Introducao";
+import { ParametrosPersonalizaveis } from "@/components/public/ParametrosPersonalizaveis";
+import { Referencias } from "@/components/public/Referencias";
+import { Simulacao } from "@/components/public/Simulacao";
+import { Solucao } from "@/components/public/Solucao";
+import TermosDeUso from "@/components/public/TermosDeUso";
 import { useSimulator } from "@/context/SimulatorContext";
 import { useAnalytics } from "@/lib/analytics";
 

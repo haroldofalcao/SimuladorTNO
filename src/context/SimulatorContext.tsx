@@ -24,6 +24,7 @@ const SimulatorContext = createContext<SimulatorContextType | undefined>(
   undefined,
 );
 
+const hospitalData: Record<string, HospitalType> = {
   publico: {
     name: "Hospital Público/SUS",
     costRange: { min: 196, max: 680 },
@@ -101,7 +102,7 @@ export function SimulatorProvider({ children }: { children: ReactNode }) {
 
   const updateConfig = (updates: Partial<Config>) => {
     setConfig((prev) => ({ ...prev, ...updates }));
-    
+
     // Track config changes
     Object.entries(updates).forEach(([key, value]) => {
       analytics.trackConfigChange(key, value as string | number);

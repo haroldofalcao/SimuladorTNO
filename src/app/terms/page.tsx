@@ -1,7 +1,7 @@
 "use client";
 
-import TermosDeUso from "@/components/sections/TermosDeUso";
-import { Header } from "@/components/Header";
+import TermosDeUso from "@/components/public/TermosDeUso";
+import { Header } from "@/components/shared/Header";
 
 export default function TermsPage() {
   return (

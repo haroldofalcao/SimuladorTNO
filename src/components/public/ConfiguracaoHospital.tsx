@@ -1,7 +1,7 @@
 'use client';
 
 import { useSimulator } from '@/context/SimulatorContext';
-import { NavigationButtons } from '@/components/NavigationButtons';
+import { NavigationButtons } from '@/components/shared/NavigationButtons';
 
 export function ConfiguracaoHospital() {
   const { setCurrentSection, config, updateConfig, hospitalData, patientData } = useSimulator();
@@ -20,7 +20,7 @@ export function ConfiguracaoHospital() {
           Por que personalizar?
         </h3>
         <p className="text-gray-600 leading-relaxed">
-          Cada hospital tem suas particularidades. Custos, perfil de pacientes e estrutura variam. 
+          Cada hospital tem suas particularidades. Custos, perfil de pacientes e estrutura variam.
           Por isso, vamos ajustar o simulador para refletir SUA realidade e gerar insights mais precisos.
         </p>
       </div>
@@ -38,11 +38,10 @@ export function ConfiguracaoHospital() {
             <div
               key={key}
               onClick={() => updateConfig({ hospitalType: key as any })}
-              className={`bg-white border-2 rounded-xl p-5 cursor-pointer transition-all text-center ${
-                config.hospitalType === key
-                  ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-cyan-50'
-                  : 'border-gray-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md'
-              }`}
+              className={`bg-white border-2 rounded-xl p-5 cursor-pointer transition-all text-center ${config.hospitalType === key
+                ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-cyan-50'
+                : 'border-gray-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md'
+                }`}
             >
               <div className="text-5xl mb-4">
                 {key === 'publico' ? '🏥' : key === 'privado' ? '🏨' : '🏢'}
@@ -74,11 +73,10 @@ export function ConfiguracaoHospital() {
             <div
               key={key}
               onClick={() => updateConfig({ patientType: key as any })}
-              className={`bg-white border-2 rounded-xl p-5 cursor-pointer transition-all text-center ${
-                config.patientType === key
-                  ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-cyan-50'
-                  : 'border-gray-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md'
-              }`}
+              className={`bg-white border-2 rounded-xl p-5 cursor-pointer transition-all text-center ${config.patientType === key
+                ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-cyan-50'
+                : 'border-gray-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md'
+                }`}
             >
               <div className="text-5xl mb-4">
                 {key === 'cirurgico' ? '🔪' : key === 'clinico' ? '💊' : '🏥'}
@@ -100,6 +98,7 @@ export function ConfiguracaoHospital() {
       <NavigationButtons
         onNext={() => setCurrentSection(4)}
         onPrevious={() => setCurrentSection(2)}
+        className="touch-manipulation"
       />
     </section>
   );

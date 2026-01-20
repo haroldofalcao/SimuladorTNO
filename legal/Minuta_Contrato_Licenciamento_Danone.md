@@ -16,9 +16,10 @@
 
 2.1. **Modelo SaaS Gerenciado:** O software ficará hospedado em infraestrutura em nuvem (Ex: Vercel/AWS) gerenciada EXCLUSIVAMENTE pela LICENCIANTE.
 2.2. **Segurança da PI:** A LICENCIADA **não terá acesso ao código-fonte** ou aos arquivos de build do servidor, apenas ao painel administrativo e front-end via navegador.
+
 2.3. **Custos de Nuvem:**
-    **Opção A (Incluso):* Os custos de servidor estão inclusos na mensalidade de manutenção até o limite de X acessos/mês.
-    *   *Opção B (Repasse):* Custos excedentes de tráfego/armazenamento serão faturados à parte.
+    ***Opção A (Incluso):** Os custos de servidor estão inclusos na mensalidade de manutenção até o limite de X acessos/mês.
+    *   **Opção B (Repasse):** Custos excedentes de tráfego/armazenamento serão faturados à parte.
 2.4. **Dados:** A LICENCIADA é proprietária dos DADOS gerados pelos seus usuários (pacientes/médicos), e a LICENCIANTE atua como operadora desses dados conforme a LGPD.
 
 ## 3. VALORES E PAGAMENTOS
@@ -41,7 +42,45 @@
 
 ---
 
-**ANEXOS TÉCNICOS:**
+# ANEXO I: ESPECIFICAÇÃO DE INFRAESTRUTURA
 
-* Anexo I: Especificação da Infraestrutura (Stack Next.js 15, Firebase).
-* Anexo II: Política de Backup e Segurança.
+Para garantir a performance, escalabilidade e segurança do **Simulador TNO**, a solução será hospedada e executada utilizando a seguinte arquitetura tecnológica de ponta:
+
+## 1. Front-end e Aplicação (Compute)
+
+* **Framework:** Next.js 15 (React).
+* **Hospedagem (Cloud):** Vercel ou AWS (Amazon Web Services).
+* **Arquitetura:** Serverless / Edge Functions para menor latência global.
+* **CDN (Content Delivery Network):** Distribuição global de ativos estáticos para carregamento rápido em qualquer região do Brasil.
+
+## 2. Banco de Dados e Backend
+
+* **Provedor:** Google Firebase.
+* **Banco de Dados:** Firestore (NoSQL, escalabilidade automática e tempo real).
+* **Autenticação:** Firebase Auth (Gestão segura de identidades e acessos).
+* **Storage:** Firebase Storage (Armazenamento seguro de mídias e documentos, se aplicável).
+
+## 3. Integrações e APIs
+
+* A comunicação entre o front-end e o banco de dados é criptografada via HTTPS (SSL/TLS).
+
+---
+
+# ANEXO II: POLÍTICA DE BACKUP, SEGURANÇA E PRIVACIDADE
+
+## 1. Segurança da Informação
+
+* **Criptografia em Trânsito:** Todo o tráfego de dados entre o navegador do usuário e os servidores é protegido por criptografia TLS 1.2 ou superior (HTTPS).
+* **Criptografia em Repouso:** Os dados armazenados no banco de dados (Firestore) são criptografados pelo provedor (Google Cloud Platform).
+* **Controle de Acesso:** O acesso administrativo ao banco de dados é restrito à equipe técnica da LICENCIANTE, protegido por autenticação de dois fatores (2FA).
+
+## 2. Política de Backup
+
+* **Frequência:** Backups automáticos diários dos dados críticos.
+* **Retenção:** Os backups são mantidos por um período de 30 dias (Rolling Window).
+* **Disaster Recovery:** Procedure de restauração testado para garantir a recuperação dos dados em caso de falha catastrófica do serviço de nuvem.
+
+## 3. Privacidade e LGPD
+
+* **Minimização de Dados:** O sistema coleta apenas os dados estritamente necessários para a realização dos cálculos e simulações.
+* **Direitos dos Titulares:** A plataforma possui mecanismos (ou a LICENCIANTE proverá suporte manual) para atender a requisições de exclusão ou exportação de dados solicitados pela LICENCIADA em nome de seus usuários finais.

@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationButtons } from "@/components/NavigationButtons";
+import { NavigationButtons } from "@/components/shared/NavigationButtons";
 import { useSimulator } from "@/context/SimulatorContext";
 
 export function ParametrosPersonalizaveis() {

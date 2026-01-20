@@ -1,64 +1,85 @@
 import Link from "next/link";
+import React from "react";
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col items-center justify-center p-6">
-      <div className="max-w-4xl w-full text-center">
-        <h1 className="text-5xl font-bold text-blue-900 mb-6 tracking-tight">
-          Simuladores de Terapia Nutricional
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      {/* Background Decor Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[rgba(17,172,237,0.2)] rounded-full blur-[120px] mix-blend-multiply filter opacity-70 animate-blob"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-[rgba(59,71,167,0.2)] rounded-full blur-[120px] mix-blend-multiply filter opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-20%] left-[20%] w-[50%] h-[50%] bg-[rgba(17,172,237,0.15)] rounded-full blur-[120px] mix-blend-multiply filter opacity-70 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="max-w-5xl w-full text-center z-10">
+        <div className="mb-8 inline-block">
+          <span className="py-1 px-3 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-semibold tracking-wide uppercase">
+            Nutrição Especializada
+          </span>
+        </div>
+
+        <h1 className="text-6xl md:text-7xl font-bold mb-6 tracking-tight leading-tight">
+          Simuladores de <br />
+          <span className="text-gradient">Terapia Nutricional</span>
         </h1>
-        <p className="text-xl text-blue-700 mb-12 max-w-2xl mx-auto">
-          Escolha o módulo adequado para sua necessidade: demonstração para
-          pacientes ou análise técnica avançada.
+
+        <p className="text-xl md:text-2xl text-gray-600 mb-16 max-w-2xl mx-auto leading-relaxed text-balance">
+          Ferramentas avançadas para demonstrar o valor clínico e econômico da nutrição em tempo real.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Public Module Card */}
-          <Link
-            href="/public"
-            className="group relative bg-white rounded-2xl shadow-xl p-8 hover:-translate-y-2 transition-all duration-300 border border-blue-100 hover:shadow-2xl hover:border-blue-300"
-          >
-            <div className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
-              B2C / Nutricionistas
-            </div>
-            <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-600 transition-colors">
-              <span className="text-3xl grooup-hover:text-white">🩺</span>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              Módulo Público
-            </h2>
-            <p className="text-gray-600">
-              Interface amigável para apresentar benefícios clínicos e economias
-              básicas a pacientes e profissionais de saúde.
-            </p>
-            <div className="mt-6 text-blue-600 font-semibold flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
-              Acessar Simulador <span aria-hidden="true">→</span>
+          <Link href="/public" className="group">
+            <div className="glass-panel p-8 h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(59,71,167,0.15)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--danone-cyan)] to-[var(--danone-blue)] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-4xl mb-6 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                  🩺
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-700 transition-colors">
+                  Módulo Didático
+                </h2>
+                <p className="text-gray-500 mb-8 text-center leading-relaxed">
+                  Interface visual para nutricionistas apresentarem benefícios aos pacientes.
+                </p>
+                <div className="mt-auto">
+                  <span className="btn-primary py-3 px-8 rounded-full font-semibold inline-flex items-center gap-2">
+                    Iniciar Demonstração <span className="text-xl">→</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </Link>
 
           {/* Technical Module Card */}
-          <Link
-            href="/technical"
-            className="group relative bg-slate-900 rounded-2xl shadow-xl p-8 hover:-translate-y-2 transition-all duration-300 border border-slate-700 hover:shadow-2xl hover:border-blue-500"
-          >
-            <div className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
-              B2B / Gestores
-            </div>
-            <div className="h-16 w-16 bg-slate-800 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-500 transition-colors">
-              <span className="text-3xl">📊</span>
-            </div>
-            <h2 className="text-2xl font-bold text-white mb-2">
-              Módulo Técnico
-            </h2>
-            <p className="text-slate-300">
-              Ferramenta avançada para representantes técnicos. Farmacoeconomia,
-              análise de sensibilidade e ROI detalhado.
-            </p>
-            <div className="mt-6 text-blue-400 font-semibold flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
-              Acessar Painel <span aria-hidden="true">→</span>
+          <Link href="/technical" className="group">
+            <div className="glass-panel p-8 h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(17,172,237,0.15)] relative overflow-hidden bg-gradient-to-br from-white to-gray-50">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-400 to-gray-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-2xl bg-gray-100 text-gray-600 flex items-center justify-center text-4xl mb-6 shadow-inner group-hover:bg-gray-800 group-hover:text-white transition-colors duration-300">
+                  📊
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-3 group-hover:text-gray-900 transition-colors">
+                  Módulo Técnico
+                </h2>
+                <p className="text-gray-500 mb-8 text-center leading-relaxed">
+                  Cálculo de ROI, Farmacoeconomia e Análises de Sensibilidade para gestores.
+                </p>
+                <div className="mt-auto">
+                  <span className="btn-secondary py-3 px-8 rounded-full font-semibold inline-flex items-center gap-2">
+                    Acessar Painel <span className="text-xl">→</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </Link>
         </div>
+
+        <footer className="mt-20 text-gray-400 text-sm">
+          <p>© 2025 Danone Nutrição Especializada. Todos os direitos reservados.</p>
+        </footer>
       </div>
     </main>
   );
