@@ -3,7 +3,7 @@ import React from "react";
 
 export default function LandingPage() {
   return (
-    <main className="h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-6 xl:p-8 relative overflow-hidden">
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-6 xl:p-8 relative overflow-hidden">
       {/* Background Decor Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[rgba(17,172,237,0.2)] rounded-full blur-[80px] sm:blur-[120px] mix-blend-multiply filter opacity-70 animate-blob"></div>
