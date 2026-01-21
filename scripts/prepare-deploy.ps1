@@ -12,8 +12,8 @@ Write-Host "✔ Cache Cleared" -ForegroundColor Green
 
 # 2. Type Check
 Write-Host "`n📝 Running TypeScript Validation..." -ForegroundColor Yellow
-$tscProcess = Start-Process -FilePath "npx" -ArgumentList "tsc --noEmit" -NoNewWindow -PassThru -Wait
-if ($tscProcess.ExitCode -ne 0) {
+cmd /c "npx tsc --noEmit"
+if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ TypeScript Validation Failed!" -ForegroundColor Red
     exit 1
 }
@@ -21,8 +21,8 @@ Write-Host "✔ TypeScript Clean" -ForegroundColor Green
 
 # 3. Production Build
 Write-Host "`n🏗️ Running Production Build..." -ForegroundColor Yellow
-$buildProcess = Start-Process -FilePath "npm" -ArgumentList "run build" -NoNewWindow -PassThru -Wait
-if ($buildProcess.ExitCode -ne 0) {
+cmd /c "npm run build"
+if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Build Failed!" -ForegroundColor Red
     exit 1
 }
